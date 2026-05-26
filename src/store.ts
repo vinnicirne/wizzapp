@@ -303,13 +303,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       const list = await fetchContactsList(userId);
       set({ contacts: [GEMINI_BOT_CONTACT, ...list] });
 
-      // Auto seleciona o primeiro contato aceito se houver e nenhum estiver ativo
-      if (list.length > 0 && !get().activeContactId) {
-        const firstAccepted = list.find(c => c.relationStatus === 'accepted');
-        if (firstAccepted) {
-          get().setActiveContact(firstAccepted.id);
-        }
-      }
+      // Removemos o auto-select para garantir que abra sempre na lista de contatos (útil no mobile)
     } catch (err) {
       console.error('Erro no fluxo de carga inicial:', err);
     }
