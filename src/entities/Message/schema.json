@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Message",
+  "description": "Especificação contratual das mensagens e interações clássicas no WizzApp",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador exclusivo v4 da mensagem"
+    },
+    "sender_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID do perfil que efetuou o disparo da mensagem"
+    },
+    "receiver_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID do perfil destinatário da mensagem"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["text", "nudge", "knock", "sound", "audio", "shake"],
+      "default": "text",
+      "description": "Classificação da interação (Texto, Chamar Atenção, Bater na Tela, Sons Retrô, Mensagem de Voz ou Tremor)"
+    },
+    "content": {
+      "type": ["string", "null"],
+      "description": "Conteúdo textual da mensagem, URL do arquivo de áudio ou identificador do som selecionado"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Marca temporal do envio registrado no banco de dados"
+    }
+  },
+  "required": ["id", "sender_id", "receiver_id", "type"]
+}

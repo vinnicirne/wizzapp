@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Contact",
+  "description": "Especificação contratual da lista de contatos e relacionamentos no WizzApp",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador exclusivo do registro de relacionamento"
+    },
+    "user_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador UUID do proprietário do relacionamento"
+    },
+    "contact_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador UUID da pessoa associada na lista"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "accepted", "blocked"],
+      "default": "pending",
+      "description": "Estado do convite ou relação (Pendente, Aceito ou Bloqueado)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Marca temporal do disparo do convite ou vinculo de contato"
+    }
+  },
+  "required": ["id", "user_id", "contact_id", "status"]
+}

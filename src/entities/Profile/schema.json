@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Profile",
+  "description": "Especificação contratual do perfil de usuário no WizzApp",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identificador único universal v4 associado ao cadastro de autenticação"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Endereço de e-mail principal do usuário"
+    },
+    "username": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "Identificador de usuário único contendo apenas letras minúsculas, números e sublinhados"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Nome de exibição pública na lista de contatos"
+    },
+    "avatar_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Link completo para hospedagem da imagem de avatar"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["online", "away", "busy", "offline"],
+      "default": "online",
+      "description": "Status de presença e comportamento no bate papo"
+    },
+    "status_message": {
+      "type": "string",
+      "maxLength": 60,
+      "default": "",
+      "description": "Subtítulo personalizado exibido abaixo do nome na lista de amigos"
+    },
+    "status_emoticon": {
+      "type": "string",
+      "default": "😊",
+      "description": "Representação visual ou emoji acoplado ao status pessoal"
+    },
+    "invite_code": {
+      "type": ["string", "null"],
+      "pattern": "^WIZZ-[A-Z0-9]{6}$",
+      "description": "CódigoVIP exclusivo gerado para convite de novos usuários"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Marca temporal do registro do usuário no banco de dados"
+    }
+  },
+  "required": ["id", "email", "username", "name", "status"]
+}
