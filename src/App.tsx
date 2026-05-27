@@ -7,6 +7,8 @@ import { useAppStore } from './store';
 import { supabase } from './lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import { usePushNotifications } from './hooks/usePushNotifications';
+import { App as CapacitorApp } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -46,7 +48,21 @@ function App() {
       setSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    let appStateListener: any;
+    if (Capacitor.isNativePlatform()) {
+      CapacitorApp.addListener('appStateChange', ({ isActive }: { isActive: boolean }) => {
+        if (isActive) {
+          setMobileView('contacts');
+        }
+      }).then((listener: any) => {
+        appStateListener = listener;
+      });
+    }
+
+    return () => {
+      subscription.unsubscribe();
+      if (appStateListener) appStateListener.remove();
+    };
   }, []);
 
   // Monitoramento de sessão ativa para carga e realtime do Supabase

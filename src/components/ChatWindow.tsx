@@ -331,7 +331,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
         </div>
 
         {/* Action Toolbar */}
-        <div className="bg-gradient-to-b from-[#F9FCFD] to-[#EAF2F8] border border-[#8BADC4] p-1 flex gap-1 items-center rounded-sm relative">
+        <div className="bg-gradient-to-b from-[#F9FCFD] to-[#EAF2F8] border border-[#8BADC4] p-1 flex flex-wrap gap-1 items-center rounded-sm relative">
           {/* ── Emoji Picker ── */}
           <div className="relative">
             <button

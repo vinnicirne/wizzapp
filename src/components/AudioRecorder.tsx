@@ -67,10 +67,10 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => 
 
   if (isRecording) {
     return (
-      <div className="flex items-center gap-1 text-xs px-2">
-        <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-        <span className="text-red-700">Gravando...</span>
-        <button onClick={stopRecording} className="px-2 py-0.5 ml-1 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] rounded-sm shadow-sm cursor-pointer">
+      <div className="flex items-center gap-1 text-xs px-2 shrink-0">
+        <span className="w-2 h-2 shrink-0 bg-red-500 rounded-full animate-pulse"></span>
+        <span className="text-red-700 whitespace-nowrap">Gravando...</span>
+        <button onClick={stopRecording} className="px-2 py-0.5 ml-1 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] rounded-sm shadow-sm cursor-pointer whitespace-nowrap shrink-0">
           Parar
         </button>
       </div>
@@ -79,12 +79,12 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => 
 
   if (audioUrl) {
     return (
-      <div className="flex items-center gap-1 px-1">
-        <audio src={audioUrl} controls className="h-6 w-32" />
-        <button disabled={isUploading} onClick={handleSend} className="px-2 py-0.5 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50">
+      <div className="flex flex-wrap items-center gap-1 px-1 shrink-0">
+        <audio src={audioUrl} controls className="h-6 w-32 md:w-48 shrink-0" />
+        <button disabled={isUploading} onClick={handleSend} className="px-2 py-0.5 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50 whitespace-nowrap shrink-0">
           {isUploading ? 'Enviando...' : 'Enviar'}
         </button>
-        <button disabled={isUploading} onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className="px-2 py-0.5 bg-[#F4DCEC] border border-[#C48BAD] hover:bg-[#E8C1D6] text-[#763E5C] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50">
+        <button disabled={isUploading} onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className="px-2 py-0.5 bg-[#F4DCEC] border border-[#C48BAD] hover:bg-[#E8C1D6] text-[#763E5C] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50 whitespace-nowrap shrink-0">
           Descartar
         </button>
       </div>
