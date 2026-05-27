@@ -118,7 +118,7 @@ export const AuthScreen: React.FC = () => {
           </div>
 
           {error && (
-            <div className="w-full text-center text-[#B05C00] bg-[#FFF4E5] border border-[#F5C277] p-2 text-[11px] font-bold mb-4 rounded-sm">
+            <div className="w-full text-center text-[#B05C00] bg-[#FFF4E5] border border-[#F5C277] p-2 text-[15px] md:text-[11px] font-bold mb-4 rounded-sm">
               {error}
             </div>
           )}
@@ -127,7 +127,7 @@ export const AuthScreen: React.FC = () => {
             {!isLogin && (
               <>
                 <div>
-                  <label className="text-[11px] text-[#3E5C76] font-bold block mb-0.5">Como quer ser chamado (Nome de exibição)?</label>
+                  <label className="text-[15px] md:text-[11px] text-[#3E5C76] font-bold block mb-0.5">Como quer ser chamado (Nome de exibição)?</label>
                   <input
                     type="text"
                     required
@@ -137,7 +137,7 @@ export const AuthScreen: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-[#3E5C76] font-bold block mb-0.5">Nome de Usuário Único (@username):</label>
+                  <label className="text-[15px] md:text-[11px] text-[#3E5C76] font-bold block mb-0.5">Nome de Usuário Único (@username):</label>
                   <input
                     type="text"
                     required
@@ -151,7 +151,7 @@ export const AuthScreen: React.FC = () => {
             )}
 
             <div>
-              <label className="text-[11px] text-[#3E5C76] font-bold block mb-0.5">Endereço de e-mail:</label>
+              <label className="text-[15px] md:text-[11px] text-[#3E5C76] font-bold block mb-0.5">Endereço de e-mail:</label>
               <input
                 type="email"
                 required
@@ -163,7 +163,7 @@ export const AuthScreen: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-[11px] text-[#3E5C76] font-bold block mb-0.5">Senha:</label>
+              <label className="text-[15px] md:text-[11px] text-[#3E5C76] font-bold block mb-0.5">Senha:</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -175,7 +175,7 @@ export const AuthScreen: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#2272A8] hover:text-[#091F41] font-bold"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[18px] md:text-[14px] md:text-[10px] text-[#2272A8] hover:text-[#091F41] font-bold"
                 >
                   {showPassword ? '🙈' : '👁️'}
                 </button>
@@ -184,7 +184,7 @@ export const AuthScreen: React.FC = () => {
 
             {!isLogin && (
               <div>
-                <label className="text-[11px] text-[#D97706] font-bold block mb-0.5 flex items-center gap-1">
+                <label className="text-[15px] md:text-[11px] text-[#D97706] font-bold block mb-0.5 flex items-center gap-1">
                   ⭐ Código de Convite VIP:
                 </label>
                 <input
@@ -199,7 +199,7 @@ export const AuthScreen: React.FC = () => {
             )}
 
             {isLogin && (
-              <div className="flex flex-col gap-1 mt-1 text-[11px] text-[#091F41]">
+              <div className="flex flex-col gap-1 mt-1 text-[15px] md:text-[11px] text-[#091F41]">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" defaultChecked className="w-3 h-3" /> Lembrar meu ID e senha
                 </label>
@@ -213,7 +213,7 @@ export const AuthScreen: React.FC = () => {
               <button 
                 type="button" 
                 onClick={() => { setIsLogin(!isLogin); setError(''); }}
-                className="text-[11px] text-[#2272A8] hover:underline"
+                className="text-[15px] md:text-[11px] text-[#2272A8] hover:underline"
               >
                 {isLogin ? 'Obter uma nova conta VIP' : 'Já tenho conta VIP'}
               </button>
@@ -231,7 +231,7 @@ export const AuthScreen: React.FC = () => {
         </div>
         
         {/* Rodapé da Janela */}
-        <div className="bg-[#DFF0FA] border-t border-[#8BADC4] px-4 py-2 text-center text-[10px] text-[#5A7A99]">
+        <div className="bg-[#DFF0FA] border-t border-[#8BADC4] px-4 py-2 text-center text-[18px] md:text-[14px] md:text-[10px] text-[#5A7A99]">
           WizzApp Messenger Plus! Edition
         </div>
       </div>

@@ -56,11 +56,23 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
       if (
         last.senderId !== currentUser.id &&
         lastPlayedMsgIdRef.current !== null &&
-        lastPlayedMsgIdRef.current !== last.id &&
-        msgAlertRef.current
+        lastPlayedMsgIdRef.current !== last.id
       ) {
-        msgAlertRef.current.currentTime = 0;
-        msgAlertRef.current.play().catch(() => {});
+        if (last.type === 'shake') {
+          triggerShakeEffect();
+        } else if (last.type === 'knock') {
+          triggerKnockEffect();
+        } else if (last.type === 'sound') {
+          try {
+            const data = JSON.parse(last.content);
+            new Audio(data.url).play().catch(() => {});
+          } catch {
+            // fallback
+          }
+        } else if (msgAlertRef.current) {
+          msgAlertRef.current.currentTime = 0;
+          msgAlertRef.current.play().catch(() => {});
+        }
       }
       // Atualiza o ref da última msg para a atual
       lastPlayedMsgIdRef.current = last.id;
@@ -127,16 +139,10 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
   */
 
 
-  const handleShake = () => {
-    if (activeGroup) {
-      sendGroupMessage('shake', 'chamou a atenção do grupo! 😲');
-    } else {
-      sendDatabaseMessage('shake', 'chamou sua atenção! 😲');
-    }
+  const triggerShakeEffect = () => {
     triggerShake();
     triggerNativeShake();
 
-    // Full-screen flash overlay
     const overlay = document.createElement('div');
     overlay.style.cssText = [
       'position:fixed', 'inset:0', 'z-index:200',
@@ -155,22 +161,23 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
     }
   };
 
-
-  const handleKnock = () => {
+  const handleShake = () => {
     if (activeGroup) {
-      sendGroupMessage('knock', 'bateu na tela de todos!');
+      sendGroupMessage('shake', 'chamou a atenção do grupo! 😲');
     } else {
-      sendDatabaseMessage('knock', 'bateu na tela!');
+      sendDatabaseMessage('shake', 'chamou sua atenção! 😲');
     }
+    triggerShakeEffect();
+  };
+
+
+  const triggerKnockEffect = () => {
     triggerNativeKnock();
-    
     const audio = new Audio('/sounds/msn-knock.mp3');
     audio.play().catch(e => console.log('Audio play prevented', e));
     
-    // Visual "Knock" Animation (MSN Style)
     const overlay = document.createElement('div');
     overlay.className = 'fixed inset-0 z-[100] flex items-center justify-center pointer-events-none transition-colors duration-75';
-    
     const fist = document.createElement('div');
     fist.innerText = '👊';
     fist.style.fontSize = '12rem';
@@ -178,40 +185,45 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
     fist.style.opacity = '0';
     fist.style.transition = 'all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     fist.style.filter = 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))';
-    
     overlay.appendChild(fist);
     document.body.appendChild(overlay);
     
-    // Quick screen shake effect on the root
     const root = document.getElementById('root');
     if (root) {
       root.style.transition = 'transform 0.05s';
       root.style.transform = 'translate(-10px, 10px)';
     }
 
-    // Trigger animation frame
     requestAnimationFrame(() => {
       fist.style.transform = 'scale(1)';
       fist.style.opacity = '1';
       overlay.style.backgroundColor = 'rgba(255,255,255,0.4)';
     });
     
-    // Revert animation
     setTimeout(() => {
       if (root) root.style.transform = 'translate(0, 0)';
       fist.style.transform = 'scale(1.5)';
       fist.style.opacity = '0';
       overlay.style.backgroundColor = 'transparent';
     }, 150);
-    
     setTimeout(() => overlay.remove(), 400);
   };
 
-  const handleSound = (_soundType: string, soundUrl: string, label: string) => {
+  const handleKnock = () => {
     if (activeGroup) {
-      sendGroupMessage('sound', `🎵 enviou o som: ${label}`);
+      sendGroupMessage('knock', 'bateu na tela de todos!');
     } else {
-      sendDatabaseMessage('sound', `🎵 enviou o som: ${label}`);
+      sendDatabaseMessage('knock', 'bateu na tela!');
+    }
+    triggerKnockEffect();
+  };
+
+  const handleSound = (_soundType: string, soundUrl: string, label: string) => {
+    const payload = JSON.stringify({ url: soundUrl, label: `🎵 enviou o som: ${label}` });
+    if (activeGroup) {
+      sendGroupMessage('sound', payload);
+    } else {
+      sendDatabaseMessage('sound', payload);
     }
     const audio = new Audio(soundUrl);
     audio.play().catch(e => console.log('Audio play prevented', e));
@@ -227,7 +239,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
   };
 
   return (
-    <div className="flex h-full p-2.5 gap-3">
+    <div className="flex h-full p-1 md:p-2.5 gap-2 md:gap-3">
       {/* Left Column: Chat and Input */}
       <div className="flex-1 flex flex-col gap-2 min-w-0">
         
@@ -282,7 +294,13 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
 
               {msg.type === 'sound' && (
                 <div className="text-purple-700 font-bold ml-3 my-1">
-                  {msg.content}
+                  {(() => {
+                    try {
+                      return JSON.parse(msg.content).label;
+                    } catch {
+                      return msg.content;
+                    }
+                  })()}
                 </div>
               )}
 
@@ -319,10 +337,10 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
             <button
               id="emoji-picker-btn"
               onClick={() => setShowEmojis(v => !v)}
-              className={`p-1 border rounded flex items-center justify-center transition-colors ${showEmojis ? 'bg-[#C4DEFF] border-[#4A90D9]' : 'hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border-transparent'}`}
+              className={`p-2 md:p-1 border rounded flex items-center justify-center transition-colors ${showEmojis ? 'bg-[#C4DEFF] border-[#4A90D9]' : 'hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border-transparent'}`}
               title="Emoticons"
             >
-              <span className="text-base leading-none">😊</span>
+              <span className="text-xl md:text-base leading-none">😊</span>
             </button>
 
             {showEmojis && (
@@ -332,7 +350,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
                 {/* Picker popup */}
                 <div className="absolute bottom-full left-0 mb-1 z-50 bg-[#F0F6FA] border border-[#8BADC4] shadow-2xl" style={{width: 272}}>
                   {/* Header */}
-                  <div className="bg-gradient-to-b from-[#C4E0F9] to-[#98C2E5] px-2 py-1 text-[10px] font-bold text-[#091F41] border-b border-[#8BADC4] flex items-center gap-1">
+                  <div className="bg-gradient-to-b from-[#C4E0F9] to-[#98C2E5] px-2 py-1 text-[18px] md:text-[14px] md:text-[10px] font-bold text-[#091F41] border-b border-[#8BADC4] flex items-center gap-1">
                     <span>😊</span> Emoticons
                   </div>
                   {/* Grid */}
@@ -348,7 +366,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
                       <button
                         key={i}
                         onClick={() => insertEmoji(em)}
-                        className="w-6 h-6 flex items-center justify-center text-[15px] hover:bg-[#C4DEFF] hover:scale-125 transition-all rounded-sm leading-none"
+                        className="w-8 h-8 md:w-6 md:h-6 flex items-center justify-center text-lg md:text-[15px] hover:bg-[#C4DEFF] hover:scale-125 transition-all rounded-sm leading-none"
                         title={em}
                       >
                         {em}
@@ -365,18 +383,18 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
           <button 
             id="shake-screen-btn"
             onClick={handleShake} 
-            className="p-1 hover:bg-[#FFE8CC] hover:border-[#E8A060] border border-transparent rounded flex items-center justify-center relative group" 
+            className="p-2 md:p-1 hover:bg-[#FFE8CC] hover:border-[#E8A060] border border-transparent rounded flex items-center justify-center relative group" 
             title="Chamar Atenção"
           >
-            <span className="text-base group-hover:anim-shake-face inline-block" style={{display:'inline-block'}}>😲</span>
+            <span className="text-xl md:text-base group-hover:anim-shake-face inline-block" style={{display:'inline-block'}}>😲</span>
           </button>
           
           <button 
             onClick={handleKnock} 
-            className="p-1 hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border border-transparent rounded flex items-center justify-center relative" 
+            className="p-2 md:p-1 hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border border-transparent rounded flex items-center justify-center relative" 
             title="Bater na Tela"
           >
-            <span className="text-base">✊</span>
+            <span className="text-xl md:text-base">✊</span>
           </button>
           
           <div className="h-5 w-px bg-[#8BADC4] mx-1 opacity-50"></div>
@@ -384,9 +402,9 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
           <div className="relative">
             <button 
               onClick={() => setShowSounds(!showSounds)}
-              className="px-2 py-1 hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border border-transparent rounded text-xs flex items-center gap-1 text-[#3E5C76]"
+              className="px-3 py-2 md:px-2 md:py-1 hover:bg-[#D5E6F2] hover:border-[#A0C0DB] border border-transparent rounded text-sm md:text-xs flex items-center gap-1 text-[#3E5C76]"
             >
-              <span className="text-base">🎵</span> Sons ▼
+              <span className="text-xl md:text-base">🎵</span> Sons ▼
             </button>
             
             {showSounds && (
@@ -413,11 +431,12 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
         </div>
 
         {/* Input Box and Send Button */}
-        <div className="flex gap-2 h-20">
+        <div className="flex gap-2 min-h-[60px] md:h-20 shrink-0">
           <textarea
             ref={textareaRef}
-            className="flex-1 bg-white border border-[#8BADC4] p-2 resize-none outline-none font-['Tahoma'] text-sm shadow-inner"
+            className="flex-1 bg-white border border-[#8BADC4] p-3 md:p-2 resize-none outline-none font-['Tahoma'] text-base md:text-sm shadow-inner rounded-sm"
             value={text}
+            placeholder="Digite sua mensagem..."
             onChange={e => setText(e.target.value)}
             onKeyDown={e => {
                if(e.key === 'Enter' && !e.shiftKey) {
@@ -428,7 +447,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
           />
           <button 
             onClick={handleSendText} 
-            className="w-[72px] bg-gradient-to-b from-[#F7FBFC] to-[#DCEAF4] border border-[#8BADC4] rounded-sm font-['Tahoma'] text-xs text-[#3E5C76] hover:bg-gradient-to-b hover:from-[#E8F2F9] hover:to-[#CDE0EF] active:bg-[#C1D6E8] shadow-sm flex items-center justify-center cursor-pointer"
+            className="w-20 md:w-[72px] bg-gradient-to-b from-[#F7FBFC] to-[#DCEAF4] border border-[#8BADC4] rounded-sm font-['Tahoma'] text-sm md:text-xs font-bold text-[#3E5C76] hover:bg-gradient-to-b hover:from-[#E8F2F9] hover:to-[#CDE0EF] active:bg-[#C1D6E8] shadow-sm flex items-center justify-center cursor-pointer"
           >
             Enviar
           </button>
@@ -449,7 +468,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
                     {member.avatarUrl ? (
                       <img src={member.avatarUrl} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-[10px] text-[#3E5C76] font-bold">{member.name.charAt(0)}</span>
+                      <span className="text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76] font-bold">{member.name.charAt(0)}</span>
                     )}
                   </div>
                 ))}
@@ -457,7 +476,7 @@ export const ChatWindow: React.FC<{ activeContact?: Contact; activeGroup?: Group
               <span className="text-xs mt-1 font-bold text-[#091F41] bg-white/50 px-2 rounded-sm truncate w-full text-center">
                 {activeGroup.name}
               </span>
-              <div className="text-[10px] text-[#5A7A99] mt-1 text-center leading-tight">
+              <div className="text-[18px] md:text-[14px] md:text-[10px] text-[#5A7A99] mt-1 text-center leading-tight">
                 {activeGroup.members.length} membros
               </div>
             </>

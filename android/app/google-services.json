@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828474339544",
+    "project_id": "wizzapp-8648c",
+    "storage_bucket": "wizzapp-8648c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828474339544:android:a0e73c6972f801296e67ad",
+        "android_client_info": {
+          "package_name": "com.wizzapp.msn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrPsBhVcE1RViGVX4_crerwMmu9suO_dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

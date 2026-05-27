@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { supabase } from '../lib/supabase';
 
 interface AudioRecorderProps {
   onSendAudio: (audioUrl: string) => void;
@@ -7,6 +8,8 @@ interface AudioRecorderProps {
 export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -21,6 +24,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => 
       
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        setAudioBlob(blob);
         setAudioUrl(URL.createObjectURL(blob));
       };
 
@@ -40,6 +44,27 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => 
     }
   };
 
+  const handleSend = async () => {
+    if (!audioBlob) return;
+    setIsUploading(true);
+    try {
+      const fileName = `audio_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.webm`;
+      const { error } = await supabase.storage.from('avatars').upload(fileName, audioBlob);
+      if (error) throw error;
+      
+      const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
+      onSendAudio(data.publicUrl);
+      
+      setAudioBlob(null);
+      setAudioUrl(null);
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao enviar áudio.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   if (isRecording) {
     return (
       <div className="flex items-center gap-1 text-xs px-2">
@@ -56,10 +81,10 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onSendAudio }) => 
     return (
       <div className="flex items-center gap-1 px-1">
         <audio src={audioUrl} controls className="h-6 w-32" />
-        <button onClick={() => { onSendAudio(audioUrl); setAudioUrl(null); }} className="px-2 py-0.5 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] text-xs rounded-sm cursor-pointer shadow-sm">
-          Enviar
+        <button disabled={isUploading} onClick={handleSend} className="px-2 py-0.5 bg-[#DCEAF4] border border-[#8BADC4] hover:bg-[#C1D6E8] text-[#3E5C76] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50">
+          {isUploading ? 'Enviando...' : 'Enviar'}
         </button>
-        <button onClick={() => setAudioUrl(null)} className="px-2 py-0.5 bg-[#F4DCEC] border border-[#C48BAD] hover:bg-[#E8C1D6] text-[#763E5C] text-xs rounded-sm cursor-pointer shadow-sm">
+        <button disabled={isUploading} onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className="px-2 py-0.5 bg-[#F4DCEC] border border-[#C48BAD] hover:bg-[#E8C1D6] text-[#763E5C] text-xs rounded-sm cursor-pointer shadow-sm disabled:opacity-50">
           Descartar
         </button>
       </div>

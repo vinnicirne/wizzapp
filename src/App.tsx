@@ -6,12 +6,14 @@ import { OnlineToasts } from './components/OnlineToasts';
 import { useAppStore } from './store';
 import { supabase } from './lib/supabase';
 import type { Session } from '@supabase/supabase-js';
+import { usePushNotifications } from './hooks/usePushNotifications';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
-  // Mobile navigation: 'contacts' = lista, 'chat' = janela de conversa
   const [mobileView, setMobileView] = useState<'contacts' | 'chat'>('contacts');
+
+  usePushNotifications();
 
   const isShaking       = useAppStore(state => state.isShaking);
   const contacts        = useAppStore(state => state.contacts);
@@ -144,7 +146,7 @@ function App() {
             </div>
           </div>
           <div className="flex-1 overflow-hidden">
-            <ContactList />
+            <ContactList onContactSelect={() => setMobileView('chat')} />
           </div>
         </div>
 
@@ -168,16 +170,16 @@ function App() {
             </button>
             {/* Avatar do contato ativo */}
             {activeContact?.avatarUrl ? (
-              <img src={activeContact.avatarUrl} className="w-8 h-8 rounded-full border-2 border-white/50 object-cover" />
+              <img src={activeContact.avatarUrl} className="w-16 h-16 md:w-12 md:h-12 md:w-8 md:h-8 rounded-full border-2 border-white/50 object-cover" />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-[13px] font-bold">
+              <div className="w-16 h-16 md:w-12 md:h-12 md:w-8 md:h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-[13px] font-bold">
                 {chatTitle.charAt(0).toUpperCase()}
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <div className="text-white font-bold text-[14px] truncate">{chatTitle}</div>
+              <div className="text-white font-bold text-[18px] md:text-[14px] truncate">{chatTitle}</div>
               {activeContact && (
-                <div className="text-white/70 text-[11px] truncate">{activeContact.statusMessage || 'Online'}</div>
+                <div className="text-white/70 text-[15px] md:text-[11px] truncate">{activeContact.statusMessage || 'Online'}</div>
               )}
             </div>
           </div>

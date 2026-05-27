@@ -78,7 +78,7 @@ const MsnAvatarLarge: React.FC<{ uid: string; avatarUrl?: string }> = ({ uid, av
       <div className="w-[52px] h-[52px] flex-shrink-0 relative group cursor-pointer border border-[#8BADC4] shadow-sm rounded overflow-hidden">
         <img src={avatarUrl} alt="Meu Avatar" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-white text-[10px] font-bold">Mudar</span>
+          <span className="text-white text-[18px] md:text-[14px] md:text-[10px] font-bold">Mudar</span>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ const MsnAvatarLarge: React.FC<{ uid: string; avatarUrl?: string }> = ({ uid, av
         <path d="M8 58 Q8 38 32 38 Q56 38 56 58 Z" fill="white" opacity="0.93" />
       </svg>
       <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded">
-        <span className="text-white text-[10px] font-bold">Mudar</span>
+        <span className="text-white text-[18px] md:text-[14px] md:text-[10px] font-bold">Mudar</span>
       </div>
     </div>
   );
@@ -122,11 +122,11 @@ const ContactRow: React.FC<{ contact: Contact; isActive: boolean; onClick: () =>
   >
     <MsnAvatar uid={contact.id} size={26} status={contact.status} avatarUrl={contact.avatarUrl} />
     <div className="flex-1 min-w-0">
-      <div className="text-[12px] font-bold text-[#091F41] truncate leading-tight">
+      <div className="text-[16px] md:text-[12px] font-bold text-[#091F41] truncate leading-tight">
         {contact.name}
       </div>
       {contact.statusMessage ? (
-        <div className="text-[10px] text-[#5A7A99] truncate leading-tight italic">
+        <div className="text-[18px] md:text-[14px] md:text-[10px] text-[#5A7A99] truncate leading-tight italic">
           {contact.statusMessage}
         </div>
       ) : null}
@@ -145,17 +145,17 @@ const GroupHeader: React.FC<{
     onClick={onToggle}
     className="w-full flex items-center gap-1 px-2 py-1 hover:bg-[#D5E6F2] transition-colors border-b border-[#C8DAEA] text-left"
   >
-    <span className="text-[10px] text-[#3E5C76] font-bold select-none">
+    <span className="text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76] font-bold select-none">
       {open ? '▼' : '▶'}
     </span>
-    <span className="text-[11px] font-bold text-[#3E5C76] flex-1">
+    <span className="text-[15px] md:text-[11px] font-bold text-[#3E5C76] flex-1">
       {label} ({count})
     </span>
   </button>
 );
 
 // ── Main component ───────────────────────────────────────────────────────────
-export const ContactList: React.FC = () => {
+export const ContactList: React.FC<{ onContactSelect?: () => void }> = ({ onContactSelect }) => {
   const {
     currentUser, contacts, activeContactId, setActiveContact,
     acceptContactRequest, declineContactRequest,
@@ -201,9 +201,9 @@ export const ContactList: React.FC = () => {
           WizzApp
         </span>
         <div className="flex gap-0.5">
-          <button className="w-5 h-4 bg-[#C9DEF0] border border-[#A0C0DB] hover:bg-[#A9CDE8] rounded-sm text-[10px] font-bold flex items-center justify-center leading-none pb-0.5">_</button>
-          <button className="w-5 h-4 bg-[#C9DEF0] border border-[#A0C0DB] hover:bg-[#A9CDE8] rounded-sm text-[10px] font-bold flex items-center justify-center">□</button>
-          <button className="w-5 h-4 bg-[#E08A8A] border border-[#C55A5A] hover:bg-[#D46060] text-white rounded-sm text-[10px] font-bold flex items-center justify-center leading-none">×</button>
+          <button className="w-5 h-4 bg-[#C9DEF0] border border-[#A0C0DB] hover:bg-[#A9CDE8] rounded-sm text-[18px] md:text-[14px] md:text-[10px] font-bold flex items-center justify-center leading-none pb-0.5">_</button>
+          <button className="w-5 h-4 bg-[#C9DEF0] border border-[#A0C0DB] hover:bg-[#A9CDE8] rounded-sm text-[18px] md:text-[14px] md:text-[10px] font-bold flex items-center justify-center">□</button>
+          <button className="w-5 h-4 bg-[#E08A8A] border border-[#C55A5A] hover:bg-[#D46060] text-white rounded-sm text-[18px] md:text-[14px] md:text-[10px] font-bold flex items-center justify-center leading-none">×</button>
         </div>
       </div>
 
@@ -214,20 +214,20 @@ export const ContactList: React.FC = () => {
         </div>
         <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5 pt-0.5">
           <div className="flex justify-between items-center gap-1">
-            <div className="text-[12px] font-bold text-[#091F41] truncate">{currentUser.name}</div>
+            <div className="text-[16px] md:text-[12px] font-bold text-[#091F41] truncate">{currentUser.name}</div>
             <button
               onClick={async () => {
                 await useAppStore.getState().updateUserStatus('Offline', '😴', 'offline');
                 supabase.auth.signOut();
               }}
-              className="text-[10px] text-[#5A7A99] hover:text-[#E08A8A] font-bold transition-colors"
+              className="text-[18px] md:text-[14px] md:text-[10px] text-[#5A7A99] hover:text-[#E08A8A] font-bold transition-colors"
               title="Sair do WizzApp"
             >
               Sair
             </button>
           </div>
           {currentUser.username && (
-            <div className="text-[10px] text-[#2272A8] font-bold truncate leading-none mb-0.5 select-all" title={currentUser.email}>
+            <div className="text-[18px] md:text-[14px] md:text-[10px] text-[#2272A8] font-bold truncate leading-none mb-0.5 select-all" title={currentUser.email}>
               @{currentUser.username}
             </div>
           )}
@@ -236,7 +236,7 @@ export const ContactList: React.FC = () => {
               <select
                 value={currentUser.status}
                 onChange={(e) => useAppStore.getState().updateUserStatus(currentUser.statusMessage, currentUser.statusEmoticon, e.target.value as any)}
-                className="text-[10px] text-[#4A6E8A] bg-transparent outline-none cursor-pointer hover:bg-[#DFF0FA] rounded py-0.5 pl-1 pr-4"
+                className="text-[18px] md:text-[14px] md:text-[10px] text-[#4A6E8A] bg-transparent outline-none cursor-pointer hover:bg-[#DFF0FA] rounded py-0.5 pl-1 pr-4"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
                 title="Alterar status"
               >
@@ -245,11 +245,11 @@ export const ContactList: React.FC = () => {
                 <option value="busy">🔴 Ocupado</option>
                 <option value="offline">⚪ Offline</option>
               </select>
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] text-[#4A6E8A] pointer-events-none">▼</span>
+              <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[15px] md:text-[11px] md:text-[8px] text-[#4A6E8A] pointer-events-none">▼</span>
             </div>
             <button
               onClick={() => setShowProfileSettings(true)}
-              className="text-[10px] text-[#5A7A99] hover:text-[#1B5FAA] transition-colors"
+              className="text-[18px] md:text-[14px] md:text-[10px] text-[#5A7A99] hover:text-[#1B5FAA] transition-colors"
               title="Configurações do perfil"
             >
               ⚙️
@@ -275,7 +275,7 @@ export const ContactList: React.FC = () => {
             placeholder="Encontrar contato..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-transparent text-[12px] font-['Tahoma'] outline-none"
+            className="w-full bg-transparent text-[16px] md:text-[12px] font-['Tahoma'] outline-none"
           />
         </div>
 
@@ -328,21 +328,21 @@ export const ContactList: React.FC = () => {
               <div key={c.id} className="w-full flex items-center justify-between gap-1 px-2 py-1.5 hover:bg-[#F2DEDE] border-b border-[#EEE]">
                 <div className="flex-1 min-w-0 flex items-center gap-1.5">
                   <MsnAvatar uid={c.id} size={22} status="offline" avatarUrl={c.avatarUrl} />
-                  <span className="text-[11px] font-bold text-[#A94442] truncate" title={`${c.name} (@${c.username})`}>
+                  <span className="text-[15px] md:text-[11px] font-bold text-[#A94442] truncate" title={`${c.name} (@${c.username})`}>
                     {c.name}
                   </span>
                 </div>
                 <div className="flex gap-1 flex-shrink-0">
                   <button
                     onClick={() => c.relationId && acceptContactRequest(c.relationId)}
-                    className="px-1.5 py-0.5 bg-[#22C55E] text-white text-[10px] font-bold rounded hover:bg-[#16A34A] shadow-sm leading-none cursor-pointer"
+                    className="px-1.5 py-0.5 bg-[#22C55E] text-white text-[18px] md:text-[14px] md:text-[10px] font-bold rounded hover:bg-[#16A34A] shadow-sm leading-none cursor-pointer"
                     title="Aceitar"
                   >
                     ✓
                   </button>
                   <button
                     onClick={() => c.relationId && declineContactRequest(c.relationId)}
-                    className="px-1.5 py-0.5 bg-[#EF4444] text-white text-[10px] font-bold rounded hover:bg-[#DC2626] shadow-sm leading-none cursor-pointer"
+                    className="px-1.5 py-0.5 bg-[#EF4444] text-white text-[18px] md:text-[14px] md:text-[10px] font-bold rounded hover:bg-[#DC2626] shadow-sm leading-none cursor-pointer"
                     title="Recusar"
                   >
                     ×
@@ -366,13 +366,13 @@ export const ContactList: React.FC = () => {
               <div key={c.id} className="w-full flex items-center justify-between gap-1 px-2 py-1.5 hover:bg-[#FFF8E7] border-b border-[#EEE] opacity-75">
                 <div className="flex-1 min-w-0 flex items-center gap-1.5">
                   <MsnAvatar uid={c.id} size={22} status="offline" avatarUrl={c.avatarUrl} />
-                  <span className="text-[11px] text-[#8A6D3B] truncate italic" title={`${c.name} (@${c.username})`}>
+                  <span className="text-[15px] md:text-[11px] text-[#8A6D3B] truncate italic" title={`${c.name} (@${c.username})`}>
                     {c.name} (Pendente)
                   </span>
                 </div>
                 <button
                   onClick={() => c.relationId && declineContactRequest(c.relationId)}
-                  className="px-1 py-0.5 bg-[#AAA] text-white text-[9px] hover:bg-[#888] rounded cursor-pointer leading-none"
+                  className="px-1 py-0.5 bg-[#AAA] text-white text-[16px] md:text-[12px] md:text-[9px] hover:bg-[#888] rounded cursor-pointer leading-none"
                   title="Cancelar Convite"
                 >
                   Cancelar
@@ -394,7 +394,10 @@ export const ContactList: React.FC = () => {
             key={c.id}
             contact={c}
             isActive={c.id === activeContactId}
-            onClick={() => setActiveContact(c.id)}
+            onClick={() => {
+              setActiveContact(c.id);
+              if (onContactSelect) onContactSelect();
+            }}
           />
         ))}
 
@@ -410,7 +413,10 @@ export const ContactList: React.FC = () => {
             key={c.id}
             contact={c}
             isActive={c.id === activeContactId}
-            onClick={() => setActiveContact(c.id)}
+            onClick={() => {
+              setActiveContact(c.id);
+              if (onContactSelect) onContactSelect();
+            }}
           />
         ))}
 
@@ -427,7 +433,10 @@ export const ContactList: React.FC = () => {
               <button
                 key={g.id}
                 id={`group-row-${g.id}`}
-                onClick={() => setActiveGroup(g.id)}
+                onClick={() => {
+                  setActiveGroup(g.id);
+                  if (onContactSelect) onContactSelect();
+                }}
                 className={`w-full flex items-center gap-2 px-2 py-1 text-left transition-colors rounded-sm ${
                   g.id === activeGroupId
                     ? 'bg-[#DDD5F3] border-l-2 border-[#7C5CB8]'
@@ -439,10 +448,10 @@ export const ContactList: React.FC = () => {
                   <span className="text-white text-[13px] leading-none">👥</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-bold text-[#3A1E7A] truncate leading-tight">
+                  <div className="text-[16px] md:text-[12px] font-bold text-[#3A1E7A] truncate leading-tight">
                     {g.name}
                   </div>
-                  <div className="text-[10px] text-[#7C5CB8] truncate leading-tight">
+                  <div className="text-[18px] md:text-[14px] md:text-[10px] text-[#7C5CB8] truncate leading-tight">
                     {g.members.length} membro{g.members.length !== 1 ? 's' : ''}
                   </div>
                 </div>
@@ -452,7 +461,7 @@ export const ContactList: React.FC = () => {
         )}
 
         {filtered.length === 0 && filteredGroups.length === 0 && (
-          <div className="text-center text-[11px] text-[#999] py-6 italic">
+          <div className="text-center text-[15px] md:text-[11px] text-[#999] py-6 italic">
             Nenhum contato encontrado
           </div>
         )}
@@ -464,7 +473,7 @@ export const ContactList: React.FC = () => {
           <circle cx="8" cy="8" r="7" fill="#3A8FCC" />
           <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">i</text>
         </svg>
-        <span className="text-[10px] text-[#3E5C76]">
+        <span className="text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76]">
           {online.length} contato{online.length !== 1 ? 's' : ''} online
           {groups.length > 0 && ` · ${groups.length} grupo${groups.length !== 1 ? 's' : ''}`}
         </span>

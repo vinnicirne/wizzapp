@@ -119,12 +119,12 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose }) => 
                   Insira o endereço de e-mail ou o @username do seu contato para adicioná-lo à sua rede do WizzApp.
                 </p>
                 {errorMsg && (
-                  <div className="w-full text-center text-[#B05C00] bg-[#FFF4E5] border border-[#F5C277] p-2 text-[11px] font-bold rounded-sm">
+                  <div className="w-full text-center text-[#B05C00] bg-[#FFF4E5] border border-[#F5C277] p-2 text-[15px] md:text-[11px] font-bold rounded-sm">
                     {errorMsg}
                   </div>
                 )}
                 <div>
-                  <label className="block text-[11px] font-bold text-[#3E5C76] mb-1">
+                  <label className="block text-[15px] md:text-[11px] font-bold text-[#3E5C76] mb-1">
                     E-mail ou Username:
                   </label>
                   <input
@@ -150,7 +150,7 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose }) => 
 
             {step === 'pending' && (
               <div className="text-center flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#22C55E]/10 rounded-full flex items-center justify-center border border-[#22C55E]/30">
+                <div className="w-16 h-16 md:w-12 md:h-12 bg-[#22C55E]/10 rounded-full flex items-center justify-center border border-[#22C55E]/30">
                   <span className="text-2xl">⏳</span>
                 </div>
                 <p className="text-[#091F41] font-bold">Solicitação Enviada!</p>
@@ -188,7 +188,7 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose }) => 
 
             {step === 'invite_code' && (
               <div className="flex flex-col gap-3 items-center text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#FAD48B] to-[#F5B445] rounded-full flex items-center justify-center border-2 border-white shadow-md">
+                <div className="w-16 h-16 md:w-12 md:h-12 bg-gradient-to-br from-[#FAD48B] to-[#F5B445] rounded-full flex items-center justify-center border-2 border-white shadow-md">
                   <span className="text-2xl">⭐</span>
                 </div>
                 <p className="text-[#091F41] font-bold">Seu Convite VIP foi gerado!</p>

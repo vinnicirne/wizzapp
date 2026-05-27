@@ -74,11 +74,11 @@ export const StatusEditor: React.FC = () => {
         title="Clique para editar seu status"
       >
         {currentEmoticon && currentEmoticon.id !== 'none' && (
-          <span className={`text-[11px] inline-block leading-none ${currentEmoticon.animClass}`} style={{ display: 'inline-block' }}>
+          <span className={`text-[15px] md:text-[11px] inline-block leading-none ${currentEmoticon.animClass}`} style={{ display: 'inline-block' }}>
             {currentUser.statusEmoticon}
           </span>
         )}
-        <span className="text-[9px] text-[#3E5C76] group-hover:text-[#091F41] truncate leading-tight text-left transition-colors">
+        <span className="text-[16px] md:text-[12px] md:text-[9px] text-[#3E5C76] group-hover:text-[#091F41] truncate leading-tight text-left transition-colors">
           {currentUser.statusMessage || 'Clique para definir status'}
         </span>
       </button>
@@ -95,14 +95,14 @@ export const StatusEditor: React.FC = () => {
           >
             {/* Header */}
             <div className="bg-gradient-to-b from-[#C4E0F9] to-[#98C2E5] px-3 py-1.5 flex items-center justify-between border-b border-[#8BADC4]">
-              <span className="text-[11px] font-bold text-[#091F41]">✏️ Minha Mensagem Pessoal</span>
+              <span className="text-[15px] md:text-[11px] font-bold text-[#091F41]">✏️ Minha Mensagem Pessoal</span>
               <button onClick={() => setIsOpen(false)} className="text-[#3E5C76] hover:text-black text-sm w-5 h-5 flex items-center justify-center">×</button>
             </div>
 
             <div className="p-3 flex flex-col gap-3">
               {/* Text input */}
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] text-[#3E5C76] font-bold uppercase tracking-wide">Mensagem de Status</label>
+                <label className="text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76] font-bold uppercase tracking-wide">Mensagem de Status</label>
                 <input
                   id="status-text-input"
                   autoFocus
@@ -114,12 +114,12 @@ export const StatusEditor: React.FC = () => {
                   placeholder="O que você está fazendo?"
                   className="w-full border border-[#8BADC4] bg-white px-2 py-1.5 text-[13px] font-['Tahoma'] outline-none focus:border-[#4A90D9] shadow-inner rounded-sm"
                 />
-                <span className="text-[9px] text-[#999] self-end">{draft.length}/60</span>
+                <span className="text-[16px] md:text-[12px] md:text-[9px] text-[#999] self-end">{draft.length}/60</span>
               </div>
 
               {/* Emoticon picker */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-[#3E5C76] font-bold uppercase tracking-wide">Emoticon Animado</label>
+                <label className="text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76] font-bold uppercase tracking-wide">Emoticon Animado</label>
                 <div className="grid grid-cols-9 gap-0.5 bg-white border border-[#8BADC4] p-1.5 shadow-inner rounded-sm max-h-[90px] overflow-y-auto">
                   {EMOTICONS.map(emote => (
                     <button
@@ -147,7 +147,7 @@ export const StatusEditor: React.FC = () => {
                   ))}
                 </div>
                 {/* Preview */}
-                <div className="flex items-center gap-2 text-[10px] text-[#3E5C76] bg-[#EAF2F8] border border-[#C8DAEA] px-2 py-1.5 rounded-sm">
+                <div className="flex items-center gap-2 text-[18px] md:text-[14px] md:text-[10px] text-[#3E5C76] bg-[#EAF2F8] border border-[#C8DAEA] px-2 py-1.5 rounded-sm">
                   <span className="font-bold">Prévia:</span>
                   {selectedEmoticon && selectedEmoticon.id !== 'none' && (
                     <span className={`inline-block ${selectedEmoticon.animClass}`} style={{ display: 'inline-block', fontSize: '13px' }}>
@@ -162,14 +162,14 @@ export const StatusEditor: React.FC = () => {
               <div className="flex gap-2 border-t border-[#C8DAEA] pt-2">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 py-2 text-[12px] font-['Tahoma'] bg-gradient-to-b from-[#F7FBFC] to-[#DCEAF4] border border-[#8BADC4] hover:from-[#E8F2F9] rounded-sm shadow-sm transition-all"
+                  className="flex-1 py-2 text-[16px] md:text-[12px] font-['Tahoma'] bg-gradient-to-b from-[#F7FBFC] to-[#DCEAF4] border border-[#8BADC4] hover:from-[#E8F2F9] rounded-sm shadow-sm transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   id="status-save-btn"
                   onClick={handleSave}
-                  className="flex-1 py-2 text-[12px] font-['Tahoma'] bg-gradient-to-b from-[#6CAADC] to-[#3A80C0] text-white border border-[#2A6099] hover:from-[#7BBDE8] rounded-sm shadow-sm font-bold transition-all"
+                  className="flex-1 py-2 text-[16px] md:text-[12px] font-['Tahoma'] bg-gradient-to-b from-[#6CAADC] to-[#3A80C0] text-white border border-[#2A6099] hover:from-[#7BBDE8] rounded-sm shadow-sm font-bold transition-all"
                 >
                   ✓ OK
                 </button>
